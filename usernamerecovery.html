@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en-JM">
+<head>
+    <meta charset="utf-8">
+    <title>Strongbox Accounts</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css">
+    <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+    
+    <style>
+        input[type=text], input[type=password], input[type=email], input[type=tel] {
+            padding: 0 8px;
+            border: 1px solid #d9d9d9;
+            border-top: 1px solid #c0c0c0;
+            border-radius: 1px;
+            height: 36px;
+        }
+    </style>
+</head>
+</head>
+<body>
+    <div class="container">
+        <header class="mdl-layout__header">
+            <div class="mdl-layout__header-row">
+                <span class="mdl-layout-title">Strongbox</span>
+            </div>
+        </header>
+        <h1 style="-webkit-font-smoothing: antialiased; color: #555; font-size: 24px; font-weight: 300; margin-top: 15px; margin-bottom: 15px; text-align: center;">Having trouble signing in?</h1>
+        <h2 style="-webkit-font-smoothing: antialiased; color: #555; font-size: 13px; font-weight: 400; margin-bottom: 15px; margin-left: auto; margin-right: auto; text-align: center; width: 354px; line-height: 20px;">Please provide additional information to aid in the recovery process.</h2>
+        <div class="login-panel-card" style="margin-top: 25px;">
+            <form novalidate method="post" action="#">
+                <div style="display: block; font-size: 15px; padding-bottom: 10px;">Enter the recovery email associated with your account</div>
+                <input type="email" name="Email" value spellcheck="false" placeholder="Enter Email" autofocus style="width: 100%;"><br><br>
+                <input type="submit" name="go" value="Go" class="btn-submit">
+            </form>
+        </div>
+    </div>
+</body>
+</html>
