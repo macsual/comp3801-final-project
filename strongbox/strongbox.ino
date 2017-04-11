@@ -45,11 +45,12 @@ static int8_t show_passwd;
 static int8_t nattempts;
 static int8_t maxattempts;
 
-const int TRIG_PIN = 8;
-const int ECHO_PIN = 9;
-const int GREEN_LED = 28;
-const int RED_LED = 24;
-const int WARN_LED = 26;
+#define TRIG_PIN  8
+#define ECHO_PIN  9
+#define GREEN_LED 28
+#define RED_LED   24
+#define WARN_LED  26
+
 boolean objectInRange = false;
 boolean startTimer = false;
 bool keypad_entering = false;
