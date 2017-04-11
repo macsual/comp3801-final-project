@@ -52,6 +52,7 @@ void openLock(){
     for (angle = 0;angle<=180;angle++){
       Servo1.write(angle);
     }
+    delay()
 }
 
 void closeLock(){
