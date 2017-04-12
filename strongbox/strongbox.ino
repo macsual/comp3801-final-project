@@ -143,7 +143,7 @@ ultrasonic(void)
 
     if (object_in_range && !start_timer) {
         Serial.println("Start Timer");
-        digitalWrite(WARN_LED,HIGH);
+        digitalWrite(WARN_LED, HIGH);
         start_timer = 1;
         timer = millis();
     }
