@@ -23,6 +23,13 @@
 
 #define SERVO_PIN  10
 
+#define LCD_RS_PIN  12
+#define LCD_EN_PIN  11
+#define LCD_D4_PIN  5
+#define LCD_D5_PIN  4
+#define LCD_D6_PIN  3
+#define LCD_D7_PIN  2
+
 static char KEYS[ROWS][COLS] = {
     {'A', '3', '2', '1'},
     {'B', '6', '5', '4'},
@@ -35,7 +42,7 @@ static unsigned char COL_PINS[COLS] = {53, 52, 51, 50};
 
 static Keypad keypad = Keypad(makeKeymap(KEYS), ROW_PINS, COL_PINS, ROWS, COLS);
 
-static LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
+static LiquidCrystal lcd(LCD_RS_PIN, LCD_EN_PIN, LCD_D4_PIN, LCD_D5_PIN, LCD_D6_PIN, LCD_D7_PIN);
 
 static char key;
 static char PIN[MAX_PIN_LEN];
