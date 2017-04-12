@@ -58,13 +58,13 @@ static bool access_granted = false;
 static bool access_denied = false;
 static bool lock_opened = false;
 static long timer;
-static int servoPin = 10;
+#define servoPin  10
 static Servo Servo1;
 
 void setup()
 {
     maxdigits = 4;
-    show_passwd = 1;
+    show_passwd = 1;s
     maxattempts = 3;
     
     lcd.begin(16, 2);
