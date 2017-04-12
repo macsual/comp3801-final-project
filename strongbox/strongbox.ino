@@ -92,6 +92,7 @@ static int8_t keypad_entering;
 static int8_t access_granted;
 static int8_t access_denied;
 static int8_t lock_open;
+static int8_t waiting_on_close_cmd;
 
 static long timer;
 static Servo Servo1;
@@ -151,6 +152,7 @@ loop()
 
     if (access_granted) {
         access_granted = 0;
+        waiting_on_close_cmd = 1;
 
         lcd.clear();
         lcd.print("ACCESS GRANTED");
@@ -283,6 +285,19 @@ ultrasonic(void)
 static void
 poll_keypad(void)
 {
+    if (waiting_on_close_cmd) {
+        key = keypad.getKey();
+
+        if (key) {
+            if (key == '#') {
+                waiting_on_close_cmd = 0;
+                close_lock();
+
+                return;
+            }
+        }
+    }
+  
     if (ndigits < maxdigits) {
         key = keypad.getKey();
     
