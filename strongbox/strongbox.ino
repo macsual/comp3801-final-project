@@ -42,12 +42,12 @@ static int8_t show_passwd;
 static int8_t nattempts;
 static int8_t maxattempts;
 
-static int8_t objectInRange = 0;
-static int8_t startTimer = 0;
-static int8_t keypad_entering = 0;
-static int8_t access_granted = 0;
-static int8_t access_denied = 0;
-static int8_t lock_opened = 0;
+static int8_t objectInRange;
+static int8_t startTimer;
+static int8_t keypad_entering;
+static int8_t access_granted;
+static int8_t access_denied;
+static int8_t lock_opened;
 static long timer;
 static Servo Servo1;
 
