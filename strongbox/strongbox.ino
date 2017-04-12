@@ -226,8 +226,8 @@ acceptInput(void)
 }
 
 static long
-microsecondsToCentimeters(long microseconds)
+microsecondsToCentimeters(long usec)
 {
-    return microseconds / 29 / 2;
+    return usec / 29 / 2;
 }
 
