@@ -63,16 +63,18 @@ static char PIN[MAX_PIN_LEN];
 
 static int8_t ndigits;
 static int8_t maxdigits;
-static int8_t show_passwd;
 static int8_t nattempts;
 static int8_t maxattempts;
 
+/* flags */
+static int8_t show_passwd;
 static int8_t object_in_range;
 static int8_t start_timer;
 static int8_t keypad_entering;
 static int8_t access_granted;
 static int8_t access_denied;
 static int8_t lock_opened;
+
 static long timer;
 static Servo Servo1;
 
