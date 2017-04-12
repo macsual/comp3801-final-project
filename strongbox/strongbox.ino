@@ -42,12 +42,12 @@ static int8_t show_passwd;
 static int8_t nattempts;
 static int8_t maxattempts;
 
-static boolean objectInRange = false;
-static boolean startTimer = false;
-static bool keypad_entering = false;
-static bool access_granted = false;
-static bool access_denied = false;
-static bool lock_opened = false;
+static int8_t objectInRange = 0;
+static int8_t startTimer = 0;
+static int8_t keypad_entering = 0;
+static int8_t access_granted = 0;
+static int8_t access_denied = 0;
+static int8_t lock_opened = 0;
 static long timer;
 static Servo Servo1;
 
@@ -104,7 +104,7 @@ open_lock(void)
 
   delay(200);
   Servo1.write(1500);
-  lock_opened = true;
+  lock_opened = 1;
 }
 
 static void
@@ -132,17 +132,17 @@ ultrasonic(void)
   cm = microsecondsToCentimeters(duration);
 
   if (cm <= 10) {
-    objectInRange = true;
+    objectInRange = 1;
     Serial.print("Object In Range");
   } else {
     Serial.println("Out of Range");
-    objectInRange = false;
+    objectInRange = 0;
   }
 
   if (objectInRange && !startTimer) {
     Serial.println("Start Timer");
     digitalWrite(WARN_LED,HIGH);
-    startTimer = true;
+    startTimer = 1;
     timer = millis();
   }
 
@@ -159,7 +159,7 @@ ultrasonic(void)
         digitalWrite(RED_LED, LOW);
         digitalWrite(WARN_LED, LOW);
         timer = 0;
-        startTimer = false;
+        startTimer = 0;
     }
   }
   
@@ -199,9 +199,9 @@ acceptInput(void)
     }
 
     if (ndigits >= 1)
-        keypad_entering = true;
+        keypad_entering = 1;
     else
-        keypad_entering = false;
+        keypad_entering = 0;
 
     if (ndigits == maxdigits) {
         if (!memcmp(PIN, "1234", 4)) {
@@ -210,7 +210,7 @@ acceptInput(void)
 
             lcd.clear();
             lcd.print("ACCESS GRANTED");
-            access_granted = true;
+            access_granted = 1;
             
         } else {
             ndigits = 0;
@@ -218,7 +218,7 @@ acceptInput(void)
 
             lcd.clear();
             lcd.print("ACCESS DENIED");
-            access_denied = true;           
+            access_denied = 1;           
         }
     }
 }
