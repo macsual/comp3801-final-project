@@ -102,7 +102,7 @@ static void close_lock(void);
 static void ultrasonic(void);
 static void accept_input(void);
 static unsigned long usec_to_centimeters(unsigned long);
-static void notify_server(const char *);
+static int notify_server(const char *);
 
 void
 setup()
@@ -311,7 +311,7 @@ accept_input(void)
     }
 }
 
-static void
+static int
 notify_server(const char *data)
 {
     uint16_t statuscode;
@@ -319,10 +319,12 @@ notify_server(const char *data)
 
     if (!fona.HTTP_POST_start(URL, F("text/plain"), (uint8_t *) data, strlen(data), &statuscode, (uint16_t *) &length)) {
         Serial.println("Failed!");
-        return;
+        return -1;
     }
 
     fona.HTTP_POST_end();
+    
+    return 0;
 }
 
 static unsigned long
