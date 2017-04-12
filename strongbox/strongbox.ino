@@ -100,7 +100,7 @@ static void open_lock(void);
 static void close_lock(void);
 
 static void ultrasonic(void);
-static void accept_input(void);
+static void poll_keypad(void);
 static unsigned long usec_to_centimeters(unsigned long);
 static int notify_server(const char *);
 
@@ -145,7 +145,7 @@ setup()
 void
 loop()
 {
-    accept_input();
+    poll_keypad();
     
     ultrasonic();
 
@@ -263,7 +263,7 @@ ultrasonic(void)
 }
 
 static void
-accept_input(void)
+poll_keypad(void)
 {
     if (nattempts == maxattempts) {
         lcd.clear();
