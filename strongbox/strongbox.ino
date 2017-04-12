@@ -171,10 +171,10 @@ loop()
     }
 }
 
+/* moves the motor unidirectionally to open the lock */
 static void
 open_lock(void)
 {
-    //moves the motor one direction to open lock
     int angle;
 
     for (angle = 180; angle >= 0; angle--)
@@ -186,10 +186,10 @@ open_lock(void)
     lock_open = 1;
 }
 
+/* moves the motor unidirectionally to close the lock */
 static void
 close_lock(void)
 {
-    //moves the motor one direction to close the lock
     int angle;
  
     for (angle = 0; angle <= 180; angle++)
