@@ -18,7 +18,7 @@
 #define RED_LED   24
 #define WARN_LED  26
 
-#define servoPin  10
+#define SERVO_PIN  10
 
 static char KEYS[ROWS][COLS] = {
     {'A', '3', '2', '1'},
@@ -43,8 +43,8 @@ static int8_t show_passwd;
 static int8_t nattempts;
 static int8_t maxattempts;
 
-static int8_t objectInRange;
-static int8_t startTimer;
+static int8_t object_in_range;
+static int8_t start_timer;
 static int8_t keypad_entering;
 static int8_t access_granted;
 static int8_t access_denied;
@@ -54,8 +54,8 @@ static Servo Servo1;
 
 static void open_lock(void);
 static void ultrasonic(void);
-static void acceptInput(void);
-static long microsecondsToCentimeters(long);
+static void accept_input(void);
+static long microseconds_to_centimeters(long);
 
 void
 setup()
@@ -71,13 +71,13 @@ setup()
     pinMode(RED_LED, OUTPUT);
     pinMode(GREEN_LED, OUTPUT);
     pinMode(WARN_LED, OUTPUT);
-    Servo1.attach(servoPin);
+    Servo1.attach(SERVO_PIN);
 }
 
 void
 loop()
 {
-    acceptInput();
+    accept_input();
     ultrasonic();
 
     if (access_granted) {
@@ -131,37 +131,37 @@ ultrasonic(void)
     pinMode(ECHO_PIN, INPUT);
     duration = pulseIn(ECHO_PIN, HIGH);
     
-    cm = microsecondsToCentimeters(duration);
+    cm = microseconds_to_centimeters(duration);
 
     if (cm <= 10) {
-        objectInRange = 1;
+        object_in_range = 1;
         Serial.print("Object In Range");
     } else {
         Serial.println("Out of Range");
-        objectInRange = 0;
+        object_in_range = 0;
     }
 
-    if (objectInRange && !startTimer) {
+    if (object_in_range && !start_timer) {
         Serial.println("Start Timer");
         digitalWrite(WARN_LED,HIGH);
-        startTimer = 1;
+        start_timer = 1;
         timer = millis();
     }
 
-    if (startTimer) {
+    if (start_timer) {
         if (millis() - timer >= 3000) {
             Serial.println("Alarm");
             digitalWrite(RED_LED, HIGH);
             digitalWrite(WARN_LED, LOW);
         }
 
-        if (!objectInRange || keypad_entering) {
+        if (!object_in_range || keypad_entering) {
             // Serial.println("Hello");
             
             digitalWrite(RED_LED, LOW);
             digitalWrite(WARN_LED, LOW);
             timer = 0;
-            startTimer = 0;
+            start_timer = 0;
         }
     }
   
@@ -173,7 +173,7 @@ ultrasonic(void)
 }
 
 static void
-acceptInput(void)
+accept_input(void)
 {
     if (nattempts == maxattempts) {
         lcd.clear();
@@ -226,7 +226,7 @@ acceptInput(void)
 }
 
 static long
-microsecondsToCentimeters(long usec)
+microseconds_to_centimeters(long usec)
 {
     return usec / 29 / 2;
 }
