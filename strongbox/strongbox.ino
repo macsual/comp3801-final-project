@@ -19,13 +19,6 @@
 
 #define servoPin  10
 
-//static char KEYS[ROWS][COLS] = {
-//    {'1', '2', '3', 'A'},
-//    {'4', '5', '6', 'B'},
-//    {'7', '8', '9', 'C'},
-//    {'*', '0', '#', 'D'}
-//};
-
 static char KEYS[ROWS][COLS] = {
     {'A', '3', '2', '1'},
     {'B', '6', '5', '4'},
@@ -33,15 +26,11 @@ static char KEYS[ROWS][COLS] = {
     {'D', '#', '0', '*'}
 };
 
-//static unsigned char ROW_PINS[ROWS] = {5, 4, 3, 2};
 static unsigned char ROW_PINS[ROWS] = {49, 48, 47, 46};
-
-//static unsigned char COL_PINS[COLS] = {9, 8, 7, 6};
 static unsigned char COL_PINS[COLS] = {53, 52, 51, 50};
 
 static Keypad keypad = Keypad(makeKeymap(KEYS), ROW_PINS, COL_PINS, ROWS, COLS);
 
-//static LiquidCrystal lcd(47, 49, 23, 24, 25, 26);
 static LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
 
 static char key;
