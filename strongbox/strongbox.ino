@@ -12,7 +12,11 @@
 
 #define BAUD_RATE 9600
 
-/* width of LCD row */
+/*
+ * Width of LCD row
+ * 
+ * The maximum length of an authentication P.I.N.
+ */
 #define MAX_PIN_LEN 16
 
 #define ROWS 4
