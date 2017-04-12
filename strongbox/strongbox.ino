@@ -205,8 +205,8 @@ static void
 ultrasonic(void)
 {
     // establish variables for duration of the ping, 
-    // and the distance result in inches and centimeters:
-    long duration, inches, cm;
+    // and the distance result in centimeters:
+    long duration, cm;
     
     // The sensor is triggered by a HIGH pulse of 10 or more microseconds.
     // Give a short LOW pulse beforehand to ensure a clean HIGH pulse:
