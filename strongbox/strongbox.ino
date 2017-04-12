@@ -218,7 +218,7 @@ accept_input(void)
         keypad_entering = 0;
 
     if (ndigits == maxdigits) {
-        if (!memcmp(PIN, "1234", 4)) {
+        if (!memcmp(PIN, "1234", maxdigits)) {
             nattempts = 0;
             ndigits = 0;
 
