@@ -242,6 +242,10 @@ ultrasonic(void)
     
     distance = usec_to_centimeters(duration);
 
+    Serial.print(distance);
+    Serial.print("cm");
+    Serial.println();
+
     if (distance <= 10) {
         object_in_range = 1;
         Serial.print("Object In Range");
@@ -274,10 +278,6 @@ ultrasonic(void)
             start_timer = 0;
         }
     }
-  
-    Serial.print(distance);
-    Serial.print("cm");
-    Serial.println();
 }
 
 static void
