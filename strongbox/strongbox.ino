@@ -67,9 +67,9 @@ setup()
     lcd.print("Enter PIN:");
 
     Serial.begin(9600);
-    pinMode(RED_LED,OUTPUT);
-    pinMode(GREEN_LED,OUTPUT);
-    pinMode(WARN_LED,OUTPUT);
+    pinMode(RED_LED, OUTPUT);
+    pinMode(GREEN_LED, OUTPUT);
+    pinMode(WARN_LED, OUTPUT);
     Servo1.attach(servoPin);
 }
 
@@ -81,18 +81,18 @@ loop()
 
     if(access_granted)
     {
-        digitalWrite(GREEN_LED,HIGH);
-        digitalWrite(WARN_LED,LOW);
-        digitalWrite(RED_LED,LOW);
+        digitalWrite(GREEN_LED, HIGH);
+        digitalWrite(WARN_LED, LOW);
+        digitalWrite(RED_LED, LOW);
         if(!lock_opened)
             open_lock();
     }
 
     if(access_denied)
     {
-        digitalWrite(RED_LED,HIGH);
-        digitalWrite(GREEN_LED,LOW);
-        digitalWrite(WARN_LED,LOW);    
+        digitalWrite(RED_LED, HIGH);
+        digitalWrite(GREEN_LED, LOW);
+        digitalWrite(WARN_LED, LOW);    
     }
 }
 
@@ -101,7 +101,7 @@ open_lock()
 {
   //moves the motor one direction to open lock
   int angle;
-    for (angle = 0;angle<=180;angle++){
+    for (angle = 0; angle <= 180; angle++){
       Servo1.write(angle);
     }  
   delay(200);
@@ -133,7 +133,7 @@ ultrasonic()
 
   cm = microsecondsToCentimeters(duration);
 
-  if(cm<=10)
+  if(cm <= 10)
   {
     objectInRange = true;
     Serial.print("Object In Range");
@@ -147,24 +147,24 @@ ultrasonic()
     Serial.println("Start Timer");
     digitalWrite(WARN_LED,HIGH);
     startTimer = true;
-    timer= millis();
+    timer = millis();
   }
 
   if(startTimer)
   {
-    if(millis()-timer>=3000)
+    if(millis() - timer >= 3000)
     {
         Serial.println("Alarm");
-        digitalWrite(RED_LED,HIGH);
-        digitalWrite(WARN_LED,LOW);
+        digitalWrite(RED_LED, HIGH);
+        digitalWrite(WARN_LED, LOW);
     }
 
     if(!objectInRange || keypad_entering)
     {
        // Serial.println("Hello");
         
-        digitalWrite(RED_LED,LOW);
-        digitalWrite(WARN_LED,LOW);
+        digitalWrite(RED_LED, LOW);
+        digitalWrite(WARN_LED, LOW);
         timer = 0;
         startTimer = false;
     }
@@ -206,9 +206,9 @@ acceptInput()
         }
     }
 
-    if(ndigits>=1)
+    if(ndigits >= 1)
     {
-        keypad_entering=true;
+        keypad_entering = true;
     }else{
         keypad_entering = false;
     }
