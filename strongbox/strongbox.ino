@@ -55,7 +55,7 @@ static Servo Servo1;
 static void open_lock(void);
 static void ultrasonic(void);
 static void acceptInput(void);
-static long microsecondsToCentimeters(long microseconds);
+static long microsecondsToCentimeters(long);
 
 void
 setup()
