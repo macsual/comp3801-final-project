@@ -89,10 +89,10 @@ setup()
     show_passwd = 1;
     maxattempts = 3;
 
-    Serial.begin(9600);
-    
     lcd.begin(16, 2);
-    lcd.print("Enter PIN:");
+    lcd.print("Initialising ...");
+
+    Serial.begin(9600);
     
     pinMode(RED_LED, OUTPUT);
     pinMode(GREEN_LED, OUTPUT);
@@ -115,6 +115,9 @@ setup()
     Serial.println("enabling GPRS");
     while(!fona.enableGPRS(true));
     Serial.println("GPRS enabled");
+
+    lcd.clear();
+    lcd.print("Enter PIN:");
 }
 
 void
@@ -157,18 +160,18 @@ open_lock(void)
     lock_opened = 1;
 }
 
-void close_lock(){
-  //moves the motor one direction to close the lock
-  int angle;
- 
-  for ( angle = 0;angle<=180;angle++){
-      Servo1.write(angle);
-    }
-
-    delay(200);
-    Servo1.write(1500);
-    lock_opened = 1;
-}
+//void close_lock(){
+//  //moves the motor one direction to close the lock
+//  int angle;
+// 
+//  for ( angle = 0;angle<=180;angle++){
+//      Servo1.write(angle);
+//    }
+//
+//    delay(200);
+//    Servo1.write(1500);
+//    lock_opened = 1;
+//}
 
 static void
 ultrasonic(void)
