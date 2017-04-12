@@ -148,9 +148,22 @@ open_lock(void)
     //moves the motor one direction to open lock
     int angle;
 
-    for (angle = 0; angle <= 180; angle++)
+    for (angle = 180;angle>=0;angle--)
         Servo1.write(angle);
     
+    delay(200);
+    Servo1.write(1500);
+    lock_opened = 1;
+}
+
+void close_lock(){
+  //moves the motor one direction to close the lock
+  int angle;
+ 
+  for ( angle = 0;angle<=180;angle++){
+      Servo1.write(angle);
+    }
+
     delay(200);
     Servo1.write(1500);
     lock_opened = 1;
