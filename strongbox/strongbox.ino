@@ -30,11 +30,18 @@
 #define LCD_D6_PIN  3
 #define LCD_D7_PIN  2
 
+//static char KEYS[ROWS][COLS] = {
+//    {'A', '3', '2', '1'},
+//    {'B', '6', '5', '4'},
+//    {'C', '9', '8', '7'},
+//    {'D', '#', '0', '*'}
+//};
+
 static char KEYS[ROWS][COLS] = {
-    {'A', '3', '2', '1'},
-    {'B', '6', '5', '4'},
-    {'C', '9', '8', '7'},
-    {'D', '#', '0', '*'}
+    {'1', '2', '3', 'A'},
+    {'4', '5', '6', 'B'},
+    {'7', '8', '9', 'C'},
+    {'*', '0', '#', 'D'}
 };
 
 static unsigned char ROW_PINS[ROWS] = {49, 48, 47, 46};
@@ -113,9 +120,22 @@ open_lock(void)
     //moves the motor one direction to open lock
     int angle;
 
-    for (angle = 0; angle <= 180; angle++)
+    for (angle = 180;angle>=0;angle--)
         Servo1.write(angle);
     
+    delay(200);
+    Servo1.write(1500);
+    lock_opened = 1;
+}
+
+void close_lock(){
+  //moves the motor one direction to close the lock
+  int angle;
+ 
+  for ( angle = 0;angle<=180;angle++){
+      Servo1.write(angle);
+    }
+
     delay(200);
     Servo1.write(1500);
     lock_opened = 1;
