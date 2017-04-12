@@ -98,77 +98,77 @@ loop()
 static void
 open_lock(void)
 {
-  //moves the motor one direction to open lock
-  int angle;
+    //moves the motor one direction to open lock
+    int angle;
     for (angle = 0; angle <= 180; angle++)
-      Servo1.write(angle);
-
-  delay(200);
-  Servo1.write(1500);
-  lock_opened = 1;
+        Servo1.write(angle);
+    
+    delay(200);
+    Servo1.write(1500);
+    lock_opened = 1;
 }
 
 static void
 ultrasonic(void)
 {
     // establish variables for duration of the ping, 
-  // and the distance result in inches and centimeters:
-  long duration, inches, cm;
+    // and the distance result in inches and centimeters:
+    long duration, inches, cm;
+    
+    // The sensor is triggered by a HIGH pulse of 10 or more microseconds.
+    // Give a short LOW pulse beforehand to ensure a clean HIGH pulse:
+    pinMode(TRIG_PIN, OUTPUT);
+    digitalWrite(TRIG_PIN, LOW);
+    delayMicroseconds(2);
+    digitalWrite(TRIG_PIN, HIGH);
+    delayMicroseconds(10);
+    digitalWrite(TRIG_PIN, LOW);
+    
+    // Read the signal from the sensor: a HIGH pulse whose
+    // duration is the time (in microseconds) from the sending
+    // of the ping to the reception of its echo off of an object.
+    pinMode(ECHO_PIN, INPUT);
+    duration = pulseIn(ECHO_PIN, HIGH);
+    
+    cm = microsecondsToCentimeters(duration);
 
-  // The sensor is triggered by a HIGH pulse of 10 or more microseconds.
-  // Give a short LOW pulse beforehand to ensure a clean HIGH pulse:
-  pinMode(TRIG_PIN, OUTPUT);
-  digitalWrite(TRIG_PIN, LOW);
-  delayMicroseconds(2);
-  digitalWrite(TRIG_PIN, HIGH);
-  delayMicroseconds(10);
-  digitalWrite(TRIG_PIN, LOW);
-
-  // Read the signal from the sensor: a HIGH pulse whose
-  // duration is the time (in microseconds) from the sending
-  // of the ping to the reception of its echo off of an object.
-  pinMode(ECHO_PIN, INPUT);
-  duration = pulseIn(ECHO_PIN, HIGH);
-
-  cm = microsecondsToCentimeters(duration);
-
-  if (cm <= 10) {
-    objectInRange = 1;
-    Serial.print("Object In Range");
-  } else {
-    Serial.println("Out of Range");
-    objectInRange = 0;
-  }
-
-  if (objectInRange && !startTimer) {
-    Serial.println("Start Timer");
-    digitalWrite(WARN_LED,HIGH);
-    startTimer = 1;
-    timer = millis();
-  }
-
-  if (startTimer) {
-    if (millis() - timer >= 3000) {
-        Serial.println("Alarm");
-        digitalWrite(RED_LED, HIGH);
-        digitalWrite(WARN_LED, LOW);
+    if (cm <= 10) {
+        objectInRange = 1;
+        Serial.print("Object In Range");
+    } else {
+        Serial.println("Out of Range");
+        objectInRange = 0;
     }
 
-    if (!objectInRange || keypad_entering) {
-       // Serial.println("Hello");
-        
-        digitalWrite(RED_LED, LOW);
-        digitalWrite(WARN_LED, LOW);
-        timer = 0;
-        startTimer = 0;
+    if (objectInRange && !startTimer) {
+        Serial.println("Start Timer");
+        digitalWrite(WARN_LED,HIGH);
+        startTimer = 1;
+        timer = millis();
     }
-  }
+
+    if (startTimer) {
+        if (millis() - timer >= 3000) {
+            Serial.println("Alarm");
+            digitalWrite(RED_LED, HIGH);
+            digitalWrite(WARN_LED, LOW);
+        }
+
+        if (!objectInRange || keypad_entering) {
+            // Serial.println("Hello");
+            
+            digitalWrite(RED_LED, LOW);
+            digitalWrite(WARN_LED, LOW);
+            timer = 0;
+            startTimer = 0;
+        }
+    }
   
-  Serial.print(cm);
-  Serial.print("cm");
-  Serial.println();
-  
-  delay(100);
+    Serial.print(cm);
+    Serial.print("cm");
+    Serial.println();
+    
+    delay(100);
 }
 
 static void
@@ -227,6 +227,6 @@ acceptInput(void)
 static long
 microsecondsToCentimeters(long microseconds)
 {
-  return microseconds / 29 / 2;
+    return microseconds / 29 / 2;
 }
 
