@@ -51,15 +51,15 @@ static int8_t maxattempts;
 #define RED_LED   24
 #define WARN_LED  26
 
-boolean objectInRange = false;
-boolean startTimer = false;
-bool keypad_entering = false;
-bool access_granted = false;
-bool access_denied = false;
-bool lock_opened = false;
-long timer;
-int servoPin = 10;
-Servo Servo1;
+static boolean objectInRange = false;
+static boolean startTimer = false;
+static bool keypad_entering = false;
+static bool access_granted = false;
+static bool access_denied = false;
+static bool lock_opened = false;
+static long timer;
+static int servoPin = 10;
+static Servo Servo1;
 
 void setup()
 {
