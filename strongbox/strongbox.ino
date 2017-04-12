@@ -63,8 +63,6 @@
 /* URL for email notification web service */ 
 #define URL "comp3801-final-project-macsual.c9users.io/cgi-bin/notify.py"
 
-static char buf[255];
-
 static HardwareSerial *fonaSerial = &Serial3;
 
 static Adafruit_FONA fona = Adafruit_FONA(FONA_RST);
