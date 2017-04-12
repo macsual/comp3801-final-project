@@ -10,6 +10,8 @@
 
 #include "Adafruit_FONA.h"
 
+#define BAUD_RATE 9600
+
 /* width of LCD row */
 #define MAX_PIN_LEN 16
 
@@ -96,7 +98,7 @@ setup()
     lcd.begin(16, 2);
     lcd.print("Initialising ...");
 
-    Serial.begin(9600);
+    Serial.begin(BAUD_RATE);
     
     pinMode(RED_LED, OUTPUT);
     pinMode(GREEN_LED, OUTPUT);
@@ -104,7 +106,7 @@ setup()
     
     Servo1.attach(SERVO_PIN);
 
-    fonaSerial->begin(9600);
+    fonaSerial->begin(BAUD_RATE);
 
     if (!fona.begin(*fonaSerial)) {
         Serial.println("Couldn't find FONA");
