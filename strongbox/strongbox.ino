@@ -56,16 +56,13 @@
 
 /* Adafruit FONA (GSM modem) */
 
-#define FONA_RX   14
-#define FONA_TX   15
-#define FONA_RST   7
+#define FONA_SERIAL   Serial3
+#define FONA_RST_PIN  7
 
 /* URL for email notification web service */ 
 #define URL "comp3801-final-project-macsual.c9users.io/cgi-bin/notify.py"
 
-static HardwareSerial *fonaSerial = &Serial3;
-
-static Adafruit_FONA fona = Adafruit_FONA(FONA_RST);
+static Adafruit_FONA fona = Adafruit_FONA(FONA_RST_PIN);
 
 static unsigned char KP_ROW_PINS[KP_ROWS] = {KP_PIN_8, KP_PIN_7, KP_PIN_6, KP_PIN_5};
 static unsigned char KP_COL_PINS[KP_COLS] = {KP_PIN_4, KP_PIN_3, KP_PIN_2, KP_PIN_1};
@@ -125,9 +122,9 @@ setup()
     
     Servo1.attach(SERVO_PIN);
 
-    fonaSerial->begin(BAUD_RATE);
+    FONA_SERIAL.begin(BAUD_RATE);
 
-    if (!fona.begin(*fonaSerial)) {
+    if (!fona.begin(FONA_SERIAL)) {
         Serial.println("Couldn't find FONA");
         for (;;);
     }
