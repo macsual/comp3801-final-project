@@ -321,9 +321,9 @@ static int
 notify_server(const char *data)
 {
     uint16_t statuscode;
-    int16_t length;
+    uint16_t content_length;
 
-    if (!fona.HTTP_POST_start(URL, F("text/plain"), (uint8_t *) data, strlen(data), &statuscode, (uint16_t *) &length)) {
+    if (!fona.HTTP_POST_start(URL, F("text/plain"), (uint8_t *) data, strlen(data), &statuscode, &content_length)) {
         Serial.println("Failed!");
         return -1;
     }
