@@ -161,7 +161,6 @@ ultrasonic()
         timer = 0;
         startTimer = false;
     }
-
   }
   
   Serial.print(cm);
