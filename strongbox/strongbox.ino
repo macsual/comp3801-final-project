@@ -75,7 +75,7 @@ static int8_t start_timer;
 static int8_t keypad_entering;
 static int8_t access_granted;
 static int8_t access_denied;
-static int8_t lock_opened;
+static int8_t lock_open;
 
 static long timer;
 static Servo Servo1;
@@ -137,7 +137,7 @@ loop()
         digitalWrite(GREEN_LED, HIGH);
         digitalWrite(WARN_LED, LOW);
         digitalWrite(RED_LED, LOW);
-        if (!lock_opened)
+        if (!lock_open)
             open_lock();
 
         notify_server("pass");
@@ -163,7 +163,8 @@ open_lock(void)
     
     delay(200);
     Servo1.write(1500);
-    lock_opened = 1;
+    
+    lock_open = 1;
 }
 
 static void
@@ -176,7 +177,8 @@ close_lock(void) {
 
     delay(200);
     Servo1.write(1500);
-    lock_opened = 1;
+    
+    lock_open = 0;
 }
 
 static void
