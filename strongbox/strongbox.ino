@@ -151,6 +151,11 @@ loop()
 
     if (access_granted) {
         access_granted = 0;
+
+        lcd.clear();
+        lcd.print("ACCESS GRANTED");
+        lcd.setCursor(0, 1);
+        lcd.print("Press # to lock");
         
         digitalWrite(GREEN_LED, HIGH);
         digitalWrite(WARN_LED, LOW);
@@ -163,12 +168,24 @@ loop()
 
     if (access_denied) {
         access_denied = 0;
+
+        lcd.clear();
+        lcd.print("ACCESS DENIED");
         
         digitalWrite(RED_LED, HIGH);
         digitalWrite(GREEN_LED, LOW);
         digitalWrite(WARN_LED, LOW);
 
         notify_server("fail");
+    }
+
+    if (nattempts == maxattempts) {
+        lcd.clear();
+        lcd.print("MAX ATTEMPTS");
+        lcd.setCursor(0, 1);
+        lcd.print("EXCEEDED");
+
+        nattempts = 0;
     }
 }
 
@@ -265,15 +282,6 @@ ultrasonic(void)
 static void
 poll_keypad(void)
 {
-    if (nattempts == maxattempts) {
-        lcd.clear();
-        lcd.print("MAX ATTEMPTS");
-        lcd.setCursor(0, 1);
-        lcd.print("EXCEEDED");
-
-        nattempts = 0;
-    }
-    
     if (ndigits < maxdigits) {
         key = keypad.getKey();
     
@@ -297,22 +305,13 @@ poll_keypad(void)
 
     if (ndigits == maxdigits) {
         if (!memcmp(PIN, "1234", maxdigits)) {
+            access_granted = 1;
             nattempts = 0;
             ndigits = 0;
-
-            lcd.clear();
-            lcd.print("ACCESS GRANTED");
-            lcd.setCursor(0, 1);
-            lcd.print("Press # to lock");
-            access_granted = 1;
-            
         } else {
+            access_denied = 1;
             ndigits = 0;
             nattempts++;
-
-            lcd.clear();
-            lcd.print("ACCESS DENIED");
-            access_denied = 1;           
         }
     }
 }
