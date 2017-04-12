@@ -73,7 +73,6 @@ setup()
     Servo1.attach(servoPin);
 }
 
-
 void
 loop()
 {
@@ -93,10 +92,8 @@ loop()
     {
         digitalWrite(RED_LED,HIGH);
         digitalWrite(GREEN_LED,LOW);
-        digitalWrite(WARN_LED,LOW);
-        
+        digitalWrite(WARN_LED,LOW);    
     }
-    
 }
 
 static void
@@ -111,7 +108,6 @@ open_lock()
   Servo1.write(1500);
   lock_opened = true;
 }
-
 
 static void
 ultrasonic()
@@ -152,7 +148,6 @@ ultrasonic()
     digitalWrite(WARN_LED,HIGH);
     startTimer = true;
     timer= millis();
-   
   }
 
   if(startTimer)
@@ -175,8 +170,6 @@ ultrasonic()
     }
 
   }
-
-  
   
   Serial.print(cm);
   Serial.print("cm");
@@ -235,8 +228,7 @@ acceptInput()
 
             lcd.clear();
             lcd.print("ACCESS DENIED");
-            access_denied = true;
-            
+            access_denied = true;           
         }
     }
 }
