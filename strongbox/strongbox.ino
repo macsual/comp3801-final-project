@@ -73,14 +73,16 @@ setup()
     maxdigits = 4;
     show_passwd = 1;
     maxattempts = 3;
+
+    Serial.begin(9600);
     
     lcd.begin(16, 2);
     lcd.print("Enter PIN:");
-
-    Serial.begin(9600);
+    
     pinMode(RED_LED, OUTPUT);
     pinMode(GREEN_LED, OUTPUT);
     pinMode(WARN_LED, OUTPUT);
+    
     Servo1.attach(SERVO_PIN);
 }
 
