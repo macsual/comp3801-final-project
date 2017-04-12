@@ -168,7 +168,8 @@ open_lock(void)
 }
 
 static void
-close_lock(void) {
+close_lock(void)
+{
     //moves the motor one direction to close the lock
     int angle;
  
