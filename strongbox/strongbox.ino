@@ -119,7 +119,7 @@ setup()
     Serial.println("delay stop");
 
     Serial.println("enabling GPRS");
-    while(!fona.enableGPRS(true));
+    while (!fona.enableGPRS(true));
     Serial.println("GPRS enabled");
 
     lcd.clear();
