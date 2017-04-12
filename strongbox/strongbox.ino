@@ -1,47 +1,66 @@
 #include <stdint.h>
-#include <string.h>
-
-#include <Servo.h>
-
-#include <LiquidCrystal.h>
+#include <string.h> /* memcmp, strlen */
 
 #include <Key.h>
-#include <Keypad.h>
+#include <Servo.h>
 
 #include "Adafruit_FONA.h"
+#include "LiquidCrystal.h"
+#include "Keypad.h"
 
 #define BAUD_RATE 9600
 
 /*
  * Width of LCD row
  * 
- * The maximum length of an authentication P.I.N.
+ * The maximum length of PIN used for authentication.
  */
 #define MAX_PIN_LEN 16
 
-#define ROWS 4
-#define COLS 4
+/* keypad */
+
+#define KP_ROWS    4
+#define KP_COLS    4
+
+#define KP_PIN_8  49
+#define KP_PIN_7  48
+#define KP_PIN_6  47
+#define KP_PIN_5  46
+#define KP_PIN_4  53
+#define KP_PIN_3  52
+#define KP_PIN_2  51
+#define KP_PIN_1  50
+
+/* ultrasonic sensor */
 
 #define TRIG_PIN  8
 #define ECHO_PIN  9
 
-#define GREEN_LED 28
-#define RED_LED   24
-#define WARN_LED  26
+/* LED */
 
+#define GREEN_LED   28
+#define RED_LED     24
+#define WARN_LED    26
+
+/* motor */
 #define SERVO_PIN  10
+
+/* LCD */
 
 #define LCD_RS_PIN  12
 #define LCD_EN_PIN  11
-#define LCD_D4_PIN  5
-#define LCD_D5_PIN  4
-#define LCD_D6_PIN  3
-#define LCD_D7_PIN  2
+#define LCD_D4_PIN   5
+#define LCD_D5_PIN   4
+#define LCD_D6_PIN   3
+#define LCD_D7_PIN   2
+
+/* Adafruit FONA (GSM modem) */
 
 #define FONA_RX   14
 #define FONA_TX   15
-#define FONA_RST  7
+#define FONA_RST   7
 
+/* URL for email notification web service */ 
 #define URL "comp3801-final-project-macsual.c9users.io/cgi-bin/notify.py"
 
 static char buf[255];
@@ -50,21 +69,19 @@ static HardwareSerial *fonaSerial = &Serial3;
 
 static Adafruit_FONA fona = Adafruit_FONA(FONA_RST);
 
-static char KEYS[ROWS][COLS] = {
+static unsigned char KP_ROW_PINS[KP_ROWS] = {KP_PIN_8, KP_PIN_7, KP_PIN_6, KP_PIN_5};
+static unsigned char KP_COL_PINS[KP_COLS] = {KP_PIN_4, KP_PIN_3, KP_PIN_2, KP_PIN_1};
+static char KP_KEYS[KP_ROWS][KP_COLS] = {
     {'1', '2', '3', 'A'},
     {'4', '5', '6', 'B'},
     {'7', '8', '9', 'C'},
     {'*', '0', '#', 'D'}
 };
-
-static unsigned char ROW_PINS[ROWS] = {49, 48, 47, 46};
-static unsigned char COL_PINS[COLS] = {53, 52, 51, 50};
-
-static Keypad keypad = Keypad(makeKeymap(KEYS), ROW_PINS, COL_PINS, ROWS, COLS);
+static char key;
+static Keypad keypad = Keypad(makeKeymap(KP_KEYS), KP_ROW_PINS, KP_COL_PINS, KP_ROWS, KP_COLS);
 
 static LiquidCrystal lcd(LCD_RS_PIN, LCD_EN_PIN, LCD_D4_PIN, LCD_D5_PIN, LCD_D6_PIN, LCD_D7_PIN);
 
-static char key;
 static char PIN[MAX_PIN_LEN];
 
 static int8_t ndigits;
