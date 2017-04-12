@@ -150,6 +150,8 @@ loop()
     ultrasonic();
 
     if (access_granted) {
+        access_granted = 0;
+        
         digitalWrite(GREEN_LED, HIGH);
         digitalWrite(WARN_LED, LOW);
         digitalWrite(RED_LED, LOW);
@@ -160,6 +162,8 @@ loop()
     }
 
     if (access_denied) {
+        access_denied = 0;
+        
         digitalWrite(RED_LED, HIGH);
         digitalWrite(GREEN_LED, LOW);
         digitalWrite(WARN_LED, LOW);
