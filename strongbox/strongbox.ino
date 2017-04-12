@@ -302,6 +302,8 @@ accept_input(void)
 
             lcd.clear();
             lcd.print("ACCESS GRANTED");
+            lcd.setCursor(0, 1);
+            lcd.print("Press # to lock");
             access_granted = 1;
             
         } else {
