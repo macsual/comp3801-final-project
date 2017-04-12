@@ -250,6 +250,7 @@ ultrasonic(void)
         object_in_range = 0;
     }
 
+    /* someone is around the safe and a timer will begin until they walk away or start entering a PIN */
     if (object_in_range && !start_timer) {
         Serial.println("Start Timer");
         digitalWrite(WARN_LED, HIGH);
@@ -258,12 +259,14 @@ ultrasonic(void)
     }
 
     if (start_timer) {
+        /* someone is loitering around the safe */
         if (millis() - timer >= 3000) {
             Serial.println("Alarm");
             digitalWrite(RED_LED, HIGH);
             digitalWrite(WARN_LED, LOW);
         }
 
+        /* person standing around the safe walked away or they started entering a PIN */
         if (!object_in_range || keypad_entering) {
             digitalWrite(RED_LED, LOW);
             digitalWrite(WARN_LED, LOW);
