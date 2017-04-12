@@ -77,6 +77,8 @@ static long timer;
 static Servo Servo1;
 
 static void open_lock(void);
+static void close_lock(void);
+
 static void ultrasonic(void);
 static void accept_input(void);
 static long microseconds_to_centimeters(long);
@@ -160,18 +162,19 @@ open_lock(void)
     lock_opened = 1;
 }
 
-//void close_lock(){
-//  //moves the motor one direction to close the lock
-//  int angle;
-// 
-//  for ( angle = 0;angle<=180;angle++){
-//      Servo1.write(angle);
-//    }
-//
-//    delay(200);
-//    Servo1.write(1500);
-//    lock_opened = 1;
-//}
+static void
+close_lock(void) {
+  //moves the motor one direction to close the lock
+  int angle;
+ 
+  for ( angle = 0;angle<=180;angle++){
+      Servo1.write(angle);
+    }
+
+    delay(200);
+    Servo1.write(1500);
+    lock_opened = 1;
+}
 
 static void
 ultrasonic(void)
