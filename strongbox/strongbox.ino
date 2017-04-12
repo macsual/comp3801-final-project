@@ -8,6 +8,9 @@
 #include <Key.h>
 #include <Keypad.h>
 
+/* width of LCD row */
+#define MAX_PIN_LEN 16
+
 #define ROWS 4
 #define COLS 4
 
@@ -35,7 +38,7 @@ static Keypad keypad = Keypad(makeKeymap(KEYS), ROW_PINS, COL_PINS, ROWS, COLS);
 static LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
 
 static char key;
-static char PIN[10];
+static char PIN[MAX_PIN_LEN];
 
 static int8_t ndigits;
 static int8_t maxdigits;
