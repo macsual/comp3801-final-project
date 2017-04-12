@@ -121,6 +121,7 @@ void
 loop()
 {
     accept_input();
+    
     ultrasonic();
 
     if (access_granted) {
