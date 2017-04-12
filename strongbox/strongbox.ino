@@ -179,6 +179,11 @@ loop()
         digitalWrite(WARN_LED, LOW);
 
         notify_server("fail");
+
+        delay(3000);
+
+        lcd.clear();
+        lcd.print("Enter PIN:");
     }
 
     if (nattempts == maxattempts) {
@@ -292,6 +297,9 @@ poll_keypad(void)
             if (key == '#') {
                 waiting_on_close_cmd = 0;
                 close_lock();
+
+                lcd.clear();
+                lcd.print("Enter PIN:");
 
                 return;
             }
