@@ -100,6 +100,7 @@ open_lock(void)
 {
     //moves the motor one direction to open lock
     int angle;
+
     for (angle = 0; angle <= 180; angle++)
         Servo1.write(angle);
     
