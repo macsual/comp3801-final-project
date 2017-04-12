@@ -51,6 +51,11 @@ static bool lock_opened = false;
 static long timer;
 static Servo Servo1;
 
+static void open_lock();
+static void ultrasonic();
+static void acceptInput();
+static long microsecondsToCentimeters(long microseconds);
+
 void setup()
 {
     maxdigits = 4;
@@ -92,7 +97,7 @@ void loop()
     
 }
 
-void open_lock()
+static void open_lock()
 {
   //moves the motor one direction to open lock
   int angle;
@@ -105,7 +110,7 @@ void open_lock()
 }
 
 
-void ultrasonic()
+static void ultrasonic()
 {
     // establish variables for duration of the ping, 
   // and the distance result in inches and centimeters:
@@ -176,7 +181,7 @@ void ultrasonic()
   delay(100);
 }
 
-void acceptInput()
+static void acceptInput()
 {
     if (nattempts == maxattempts) {
         lcd.clear();
@@ -231,7 +236,7 @@ void acceptInput()
     }
 }
 
-long microsecondsToCentimeters(long microseconds)
+static long microsecondsToCentimeters(long microseconds)
 {
   return microseconds / 29 / 2;
 }
