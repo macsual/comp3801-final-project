@@ -56,7 +56,8 @@ static void ultrasonic();
 static void acceptInput();
 static long microsecondsToCentimeters(long microseconds);
 
-void setup()
+void
+setup()
 {
     maxdigits = 4;
     show_passwd = 1;
@@ -73,7 +74,8 @@ void setup()
 }
 
 
-void loop()
+void
+loop()
 {
     acceptInput();
     ultrasonic();
@@ -97,7 +99,8 @@ void loop()
     
 }
 
-static void open_lock()
+static void
+open_lock()
 {
   //moves the motor one direction to open lock
   int angle;
@@ -110,7 +113,8 @@ static void open_lock()
 }
 
 
-static void ultrasonic()
+static void
+ultrasonic()
 {
     // establish variables for duration of the ping, 
   // and the distance result in inches and centimeters:
@@ -181,7 +185,8 @@ static void ultrasonic()
   delay(100);
 }
 
-static void acceptInput()
+static void
+acceptInput()
 {
     if (nattempts == maxattempts) {
         lcd.clear();
@@ -236,7 +241,8 @@ static void acceptInput()
     }
 }
 
-static long microsecondsToCentimeters(long microseconds)
+static long
+microsecondsToCentimeters(long microseconds)
 {
   return microseconds / 29 / 2;
 }
