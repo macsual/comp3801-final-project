@@ -229,8 +229,6 @@ ultrasonic(void)
         }
 
         if (!object_in_range || keypad_entering) {
-            // Serial.println("Hello");
-            
             digitalWrite(RED_LED, LOW);
             digitalWrite(WARN_LED, LOW);
             timer = 0;
