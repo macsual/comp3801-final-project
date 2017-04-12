@@ -104,7 +104,7 @@ static void close_lock(void);
 
 static void ultrasonic(void);
 static void accept_input(void);
-static long microseconds_to_centimeters(long);
+static unsigned long usec_to_centimeters(unsigned long);
 static void notify_server(const char *);
 
 void
@@ -204,9 +204,8 @@ close_lock(void)
 static void
 ultrasonic(void)
 {
-    // establish variables for duration of the ping, 
-    // and the distance result in centimeters:
-    long duration, cm;
+    unsigned long duration; /* ping duration */
+    unsigned long distance; /* object distance in centimeters */
     
     // The sensor is triggered by a HIGH pulse of 10 or more microseconds.
     // Give a short LOW pulse beforehand to ensure a clean HIGH pulse:
@@ -223,9 +222,9 @@ ultrasonic(void)
     pinMode(ECHO_PIN, INPUT);
     duration = pulseIn(ECHO_PIN, HIGH);
     
-    cm = microseconds_to_centimeters(duration);
+    distance = usec_to_centimeters(duration);
 
-    if (cm <= 10) {
+    if (distance <= 10) {
         object_in_range = 1;
         Serial.print("Object In Range");
     } else {
@@ -255,7 +254,7 @@ ultrasonic(void)
         }
     }
   
-    Serial.print(cm);
+    Serial.print(distance);
     Serial.print("cm");
     Serial.println();
     
@@ -329,8 +328,8 @@ notify_server(const char *data)
     fona.HTTP_POST_end();
 }
 
-static long
-microseconds_to_centimeters(long usec)
+static unsigned long
+usec_to_centimeters(unsigned long usec)
 {
     return usec / 29 / 2;
 }
