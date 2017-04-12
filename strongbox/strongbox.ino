@@ -275,8 +275,6 @@ ultrasonic(void)
     Serial.print(distance);
     Serial.print("cm");
     Serial.println();
-    
-    delay(100);
 }
 
 static void
