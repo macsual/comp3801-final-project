@@ -79,17 +79,15 @@ loop()
     acceptInput();
     ultrasonic();
 
-    if(access_granted)
-    {
+    if (access_granted) {
         digitalWrite(GREEN_LED, HIGH);
         digitalWrite(WARN_LED, LOW);
         digitalWrite(RED_LED, LOW);
-        if(!lock_opened)
+        if (!lock_opened)
             open_lock();
     }
 
-    if(access_denied)
-    {
+    if (access_denied) {
         digitalWrite(RED_LED, HIGH);
         digitalWrite(GREEN_LED, LOW);
         digitalWrite(WARN_LED, LOW);    
@@ -101,9 +99,9 @@ open_lock()
 {
   //moves the motor one direction to open lock
   int angle;
-    for (angle = 0; angle <= 180; angle++){
+    for (angle = 0; angle <= 180; angle++)
       Servo1.write(angle);
-    }  
+
   delay(200);
   Servo1.write(1500);
   lock_opened = true;
@@ -133,34 +131,29 @@ ultrasonic()
 
   cm = microsecondsToCentimeters(duration);
 
-  if(cm <= 10)
-  {
+  if (cm <= 10) {
     objectInRange = true;
     Serial.print("Object In Range");
-  }else{
+  } else {
     Serial.println("Out of Range");
     objectInRange = false;
   }
 
-  if(objectInRange && !startTimer)
-  {
+  if (objectInRange && !startTimer) {
     Serial.println("Start Timer");
     digitalWrite(WARN_LED,HIGH);
     startTimer = true;
     timer = millis();
   }
 
-  if(startTimer)
-  {
-    if(millis() - timer >= 3000)
-    {
+  if (startTimer) {
+    if (millis() - timer >= 3000) {
         Serial.println("Alarm");
         digitalWrite(RED_LED, HIGH);
         digitalWrite(WARN_LED, LOW);
     }
 
-    if(!objectInRange || keypad_entering)
-    {
+    if (!objectInRange || keypad_entering) {
        // Serial.println("Hello");
         
         digitalWrite(RED_LED, LOW);
@@ -206,12 +199,10 @@ acceptInput()
         }
     }
 
-    if(ndigits >= 1)
-    {
+    if (ndigits >= 1)
         keypad_entering = true;
-    }else{
+    else
         keypad_entering = false;
-    }
 
     if (ndigits == maxdigits) {
         if (!memcmp(PIN, "1234", 4)) {
