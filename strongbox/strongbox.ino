@@ -8,6 +8,8 @@
 #include <Key.h>
 #include <Keypad.h>
 
+#include "Adafruit_FONA.h"
+
 /* width of LCD row */
 #define MAX_PIN_LEN 16
 
@@ -30,11 +32,23 @@
 #define LCD_D6_PIN  3
 #define LCD_D7_PIN  2
 
+#define FONA_RX   14
+#define FONA_TX   15
+#define FONA_RST  7
+
+#define URL "comp3801-final-project-macsual.c9users.io/cgi-bin/notify.py"
+
+static char buf[255];
+
+static HardwareSerial *fonaSerial = &Serial3;
+
+static Adafruit_FONA fona = Adafruit_FONA(FONA_RST);
+
 static char KEYS[ROWS][COLS] = {
-    {'A', '3', '2', '1'},
-    {'B', '6', '5', '4'},
-    {'C', '9', '8', '7'},
-    {'D', '#', '0', '*'}
+    {'1', '2', '3', 'A'},
+    {'4', '5', '6', 'B'},
+    {'7', '8', '9', 'C'},
+    {'*', '0', '#', 'D'}
 };
 
 static unsigned char ROW_PINS[ROWS] = {49, 48, 47, 46};
@@ -66,6 +80,7 @@ static void open_lock(void);
 static void ultrasonic(void);
 static void accept_input(void);
 static long microseconds_to_centimeters(long);
+static void notify_server(const char *);
 
 void
 setup()
@@ -84,6 +99,22 @@ setup()
     pinMode(WARN_LED, OUTPUT);
     
     Servo1.attach(SERVO_PIN);
+
+    fonaSerial->begin(9600);
+
+    if (!fona.begin(*fonaSerial)) {
+        Serial.println("Couldn't find FONA");
+        for (;;);
+    }
+
+    fona.setGPRSNetworkSettings(F("ppinternet"));
+    Serial.println("delay start");
+    delay(10000);
+    Serial.println("delay stop");
+
+    Serial.println("enabling GPRS");
+    while(!fona.enableGPRS(true));
+    Serial.println("GPRS enabled");
 }
 
 void
@@ -98,12 +129,16 @@ loop()
         digitalWrite(RED_LED, LOW);
         if (!lock_opened)
             open_lock();
+
+        notify_server("pass");
     }
 
     if (access_denied) {
         digitalWrite(RED_LED, HIGH);
         digitalWrite(GREEN_LED, LOW);
-        digitalWrite(WARN_LED, LOW);    
+        digitalWrite(WARN_LED, LOW);
+
+        notify_server("fail");
     }
 }
 
@@ -235,6 +270,20 @@ accept_input(void)
             access_denied = 1;           
         }
     }
+}
+
+static void
+notify_server(const char *data)
+{
+    uint16_t statuscode;
+    int16_t length;
+
+    if (!fona.HTTP_POST_start(URL, F("text/plain"), (uint8_t *) data, strlen(data), &statuscode, (uint16_t *) &length)) {
+        Serial.println("Failed!");
+        return;
+    }
+
+    fona.HTTP_POST_end();
 }
 
 static long
