@@ -10,6 +10,15 @@
 #define ROWS 4
 #define COLS 4
 
+#define TRIG_PIN  8
+#define ECHO_PIN  9
+
+#define GREEN_LED 28
+#define RED_LED   24
+#define WARN_LED  26
+
+#define servoPin  10
+
 //static char KEYS[ROWS][COLS] = {
 //    {'1', '2', '3', 'A'},
 //    {'4', '5', '6', 'B'},
@@ -23,7 +32,6 @@ static char KEYS[ROWS][COLS] = {
     {'C', '9', '8', '7'},
     {'D', '#', '0', '*'}
 };
-
 
 //static unsigned char ROW_PINS[ROWS] = {5, 4, 3, 2};
 static unsigned char ROW_PINS[ROWS] = {49, 48, 47, 46};
@@ -45,12 +53,6 @@ static int8_t show_passwd;
 static int8_t nattempts;
 static int8_t maxattempts;
 
-#define TRIG_PIN  8
-#define ECHO_PIN  9
-#define GREEN_LED 28
-#define RED_LED   24
-#define WARN_LED  26
-
 static boolean objectInRange = false;
 static boolean startTimer = false;
 static bool keypad_entering = false;
@@ -58,13 +60,12 @@ static bool access_granted = false;
 static bool access_denied = false;
 static bool lock_opened = false;
 static long timer;
-#define servoPin  10
 static Servo Servo1;
 
 void setup()
 {
     maxdigits = 4;
-    show_passwd = 1;s
+    show_passwd = 1;
     maxattempts = 3;
     
     lcd.begin(16, 2);
