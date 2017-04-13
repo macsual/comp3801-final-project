@@ -125,10 +125,8 @@ setup()
     lcd.print("Initialising ...");
 
     Serial.begin(BAUD_RATE);
-    
-    pinMode(RED_LED, OUTPUT);
-    pinMode(GREEN_LED, OUTPUT);
-    pinMode(WARN_LED, OUTPUT);
+
+    DDRA |= B01010100;  /* set LED pins for ouput */
     
     Servo1.attach(SERVO_PIN);
 
@@ -167,10 +165,9 @@ loop()
         lcd.print("ACCESS GRANTED");
         lcd.setCursor(0, 1);
         lcd.print("Press # to lock");
-        
-        digitalWrite(GREEN_LED, HIGH);
-        digitalWrite(WARN_LED, LOW);
-        digitalWrite(RED_LED, LOW);
+
+        PORTA = B01000000;  /* turn on green LED */
+
         if (!lock_open)
             open_lock();
 
@@ -182,10 +179,8 @@ loop()
 
         lcd.clear();
         lcd.print("ACCESS DENIED");
-        
-        digitalWrite(RED_LED, HIGH);
-        digitalWrite(GREEN_LED, LOW);
-        digitalWrite(WARN_LED, LOW);
+
+        PORTA = B00000100;  /* turn on red LED */
 
         notify(AUTH_FAIL);
 
@@ -258,7 +253,7 @@ ultrasonic(void)
     // of the ping to the reception of its echo off of an object.
     pinMode(ECHO_PIN, INPUT);
     duration = pulseIn(ECHO_PIN, HIGH);
-    
+
     distance = usec_to_centimeters(duration);
 
     Serial.print(distance);
@@ -266,7 +261,7 @@ ultrasonic(void)
 
     if (distance <= 10) {
         object_in_range = 1;
-        Serial.print("Object In Range");
+        Serial.println("Object In Range");
     } else {
         Serial.println("Out of Range");
         object_in_range = 0;
@@ -275,7 +270,9 @@ ultrasonic(void)
     /* someone is around the safe and a timer will begin until they walk away or start entering a PIN */
     if (object_in_range && !start_timer) {
         Serial.println("Start Timer");
-        digitalWrite(WARN_LED, HIGH);
+
+        PORTA = B00010000;  /* turn on yellow LED */
+
         start_timer = 1;
         timer = millis();
     }
@@ -285,17 +282,17 @@ ultrasonic(void)
         if (millis() - timer >= 60000) {
             notify(AUTH_TIMEOUT);
 
+            PORTA = B00000100;  /* turn on red LED */
+
             Serial.println("Alarm");
-            digitalWrite(RED_LED, HIGH);
-            digitalWrite(WARN_LED, LOW);
         }
 
         /* person standing around the safe walked away or they started entering a PIN */
         if (!object_in_range || keypad_entering) {
-            digitalWrite(RED_LED, LOW);
-            digitalWrite(WARN_LED, LOW);
             timer = 0;
             start_timer = 0;
+
+            PORTA = B00000000;  /* turn off all LEDs */
         }
     }
 }
