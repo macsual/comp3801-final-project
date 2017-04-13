@@ -82,7 +82,6 @@ static char KP_KEYS[KP_ROWS][KP_COLS] = {
     {'7', '8', '9', 'C'},
     {'*', '0', '#', 'D'}
 };
-static char key;
 static Keypad keypad = Keypad(makeKeymap(KP_KEYS), KP_ROW_PINS, KP_COL_PINS, KP_ROWS, KP_COLS);
 
 static LiquidCrystal lcd(LCD_RS_PIN, LCD_EN_PIN, LCD_D4_PIN, LCD_D5_PIN, LCD_D6_PIN, LCD_D7_PIN);
@@ -104,7 +103,6 @@ static int8_t access_denied;
 static int8_t lock_open;
 static int8_t waiting_on_close_cmd;
 
-static unsigned long timer;
 static Servo Servo1;
 
 static void open_lock(void);
@@ -244,6 +242,7 @@ ultrasonic(void)
 {
     unsigned long duration; /* ping duration */
     unsigned long distance; /* object distance in centimeters */
+    static unsigned long timer;
     
     // The sensor is triggered by a HIGH pulse of 10 or more microseconds.
     // Give a short LOW pulse beforehand to ensure a clean HIGH pulse:
@@ -304,6 +303,8 @@ ultrasonic(void)
 static void
 poll_keypad(void)
 {
+    char key;
+
     if (waiting_on_close_cmd) {
         key = keypad.getKey();
 
