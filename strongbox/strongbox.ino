@@ -351,6 +351,11 @@ notify_server(const char *data)
         return -1;
     }
 
+    if (statuscode / 100 != 2) {
+        fona.HTTP_POST_end();
+        return -1;
+    }
+
     fona.HTTP_POST_end();
     
     return 0;
