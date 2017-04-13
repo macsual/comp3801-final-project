@@ -250,8 +250,7 @@ ultrasonic(void)
     distance = usec_to_centimeters(duration);
 
     Serial.print(distance);
-    Serial.print("cm");
-    Serial.println();
+    Serial.println(" cm");
 
     if (distance <= 10) {
         object_in_range = 1;
