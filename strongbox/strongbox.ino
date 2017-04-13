@@ -1,3 +1,4 @@
+#include <stdio.h>  /* snprintf */
 #include <stdint.h>
 #include <string.h> /* memcmp, strlen */
 
@@ -59,8 +60,17 @@
 #define FONA_SERIAL   Serial3
 #define FONA_RST_PIN  7
 
-/* URL for email notification web service */ 
-#define URL "comp3801-final-project-macsual.c9users.io/cgi-bin/notify.py"
+/* email notifications */
+
+#define SMTP_SRV        "smtp.gmail.com"
+#define SMTP_PORT       "465"
+#define SMTP_USERNAME   "webmaster@example.com"
+#define SMTP_PASSWORD   "password"
+
+#define AUTH_PASS           100
+#define AUTH_FAIL           200
+#define AUTH_MAX_ATTEMPTS   300
+#define AUTH_TIMEOUT        400
 
 static Adafruit_FONA fona = Adafruit_FONA(FONA_RST_PIN);
 
@@ -103,7 +113,8 @@ static void close_lock(void);
 static void ultrasonic(void);
 static void poll_keypad(void);
 static unsigned long usec_to_centimeters(unsigned long);
-static int notify_server(const char *);
+static int8_t notify(int8_t);
+static int8_t send_email(const char *subject, const char *body, size_t len);
 
 void
 setup()
@@ -165,7 +176,7 @@ loop()
         if (!lock_open)
             open_lock();
 
-        notify_server("pass");
+        notify(AUTH_PASS);
     }
 
     if (access_denied) {
@@ -178,7 +189,7 @@ loop()
         digitalWrite(GREEN_LED, LOW);
         digitalWrite(WARN_LED, LOW);
 
-        notify_server("fail");
+        notify(AUTH_FAIL);
 
         delay(3000);
 
@@ -191,6 +202,8 @@ loop()
         lcd.print("MAX ATTEMPTS");
         lcd.setCursor(0, 1);
         lcd.print("EXCEEDED");
+
+        notify(AUTH_MAX_ATTEMPTS);
 
         nattempts = 0;
     }
@@ -270,7 +283,9 @@ ultrasonic(void)
 
     if (start_timer) {
         /* someone is loitering around the safe */
-        if (millis() - timer >= 3000) {
+        if (millis() - timer >= 60000) {
+            notify(AUTH_TIMEOUT);
+
             Serial.println("Alarm");
             digitalWrite(RED_LED, HIGH);
             digitalWrite(WARN_LED, LOW);
@@ -339,24 +354,92 @@ poll_keypad(void)
     }
 }
 
-static int
-notify_server(const char *data)
+static int8_t
+notify(int8_t event)
 {
-    uint16_t statuscode;
-    uint16_t content_length;
+    char buf[23];
+    const char *subject;
+    char body[128];
+    int body_len;
 
-    if (!fona.HTTP_POST_start(URL, F("text/plain"), (uint8_t *) data, strlen(data), &statuscode, &content_length)) {
-        Serial.println("Failed!");
-        return -1;
+     if (!fona.getTime(buf, sizeof buf))
+        Serial.println(F("Failed to get time"));
+    else
+        Serial.println(buf);
+
+    switch (event) {
+    case AUTH_PASS:
+        subject = "Successful PIN unlock";
+        body_len = snprintf(body, sizeof body, "Strongbox authentication success at %s", buf);
+        break;
+
+    case AUTH_FAIL:
+        subject = "Unsuccessful PIN unlock";
+        body_len = snprintf(body, sizeof body, "Strongbox authentication failure at %s", buf);
+        break;
+
+    case AUTH_MAX_ATTEMPTS:
+        subject = "Number of PIN unlock attempts exceeded";
+        body_len = snprintf(body, sizeof body, "Strongbox authentication failure after too many attempts at %s", buf);
+        break;
+
+    case AUTH_TIMEOUT:
+        subject = "PIN unlock attempt timeout exceeded";
+        body_len = snprintf(body, sizeof body, "Strongbox authentication failure after PIN entry time limit exceeded at %s", buf);
+        break;
+
+    default:
+        break;
     }
 
-    if (statuscode / 100 != 2) {
-        fona.HTTP_POST_end();
-        return -1;
-    }
+    return send_email(subject, body, body_len);
+}
 
-    fona.HTTP_POST_end();
+static int8_t
+send_email(const char *subject, const char *body, size_t len)
+{
+    if (!fona.sendCheckReply(F("AT+EMAILCID=1"), F("OK")))
+        return -1;
+
+    if (!fona.sendCheckReply(F("AT+EMAILTO=30"), F("OK")))
+        return -1;
+
+    if (!fona.sendCheckReply(F("AT+EMAILSSL=1"), F("OK")))
+        return -1;
+
+    if (!fona.sendCheckReply(F("AT+SMTPSRV=\"" SMTP_SRV "\"," SMTP_PORT), F("OK")))
+        return -1;
+
+    if (!fona.sendCheckReply(F("AT+SMTPAUTH=1,\"" SMTP_USERNAME "\",\"" SMTP_PASSWORD "\""), F("OK")))
+        return -1;
+
+    if (!fona.sendCheckReply(F("AT+SMTPFROM=\"" SMTP_USERNAME "\",\"Strongbox\""), F("OK")))
+        return -1;
+
+    if (!fona.sendCheckReply(F("AT+SMTPRCPT=0,0,\"webmaster@example.com\""), F("OK")))
+        return -1;
     
+    fona.print(F("AT+SMTPSUB=\""));
+    fona.print(subject);
+    fona.println("\"");
+
+    if (!fona.expectReply(F("OK")))
+        return -1;
+
+    fona.print(F("AT+SMTPBODY="));
+    fona.println(len);
+
+    if (!fona.expectReply(F("DOWNLOAD")))
+        return -1;
+
+    fona.println(body);
+
+    if (!fona.expectReply(F("OK")))
+        return -1;
+
+    if (!fona.sendCheckReply(F("AT+SMTPSEND"), F("OK")))
+        return -1;
+
     return 0;
 }
 
