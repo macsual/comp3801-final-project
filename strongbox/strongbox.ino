@@ -104,7 +104,7 @@ static int8_t access_denied;
 static int8_t lock_open;
 static int8_t waiting_on_close_cmd;
 
-static long timer;
+static unsigned long timer;
 static Servo Servo1;
 
 static void open_lock(void);
