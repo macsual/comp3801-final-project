@@ -118,7 +118,7 @@ void
 setup()
 {
     maxdigits = 4;
-    show_passwd = 1;
+    show_passwd = 0;
     maxattempts = 3;
 
     lcd.begin(16, 2);
